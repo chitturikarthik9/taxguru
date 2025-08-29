@@ -1,0 +1,8 @@
+{
+  "name": "Copy of TaxGuru: The Income Tax Calculator",
+  "description": "An interactive Indian income tax calculator that compares the Old and New tax regimes. It includes a helpful AI chatbot, TaxGPT, to answer your tax-related questions.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "prompt": ""
+}
