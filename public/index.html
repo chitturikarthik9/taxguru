@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Fullstack App</title>
+	<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+	<header class="container">
+		<h1>Fullstack App</h1>
+		<p>Node/Express backend with static HTML/CSS/JS frontend</p>
+	</header>
+
+	<main class="container">
+		<section class="card">
+			<h2>Health Check</h2>
+			<button id="healthBtn">Check /api/health</button>
+			<pre id="healthOut" class="output"></pre>
+		</section>
+
+		<section class="card">
+			<h2>Echo API</h2>
+			<form id="echoForm">
+				<label for="echoInput">Message</label>
+				<input id="echoInput" name="message" type="text" placeholder="Type something..." required />
+				<button type="submit">Send to /api/echo</button>
+			</form>
+			<pre id="echoOut" class="output"></pre>
+		</section>
+	</main>
+
+	<footer class="container footer">Built with Express and vanilla JS</footer>
+
+	<script src="/app.js"></script>
+</body>
+</html>
+
