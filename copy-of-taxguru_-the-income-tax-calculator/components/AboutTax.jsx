@@ -1,16 +1,8 @@
-
 import React, { useState } from 'react';
-import Card from './Card';
+import Card from './Card.jsx';
 
 // Modal component for displaying the benefits
-interface InfoModalProps {
-    title: string;
-    children: React.ReactNode;
-    onClose: () => void;
-    dialogClassName?: string;
-}
-
-const InfoModal: React.FC<InfoModalProps> = ({ title, children, onClose, dialogClassName = 'max-w-3xl' }) => (
+const InfoModal = ({ title, children, onClose, dialogClassName = 'max-w-3xl' }) => (
     <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4" onClick={onClose} aria-modal="true" role="dialog">
         <div className={`bg-white dark:bg-neutral-dark rounded-xl shadow-2xl w-full max-h-[90vh] flex flex-col ${dialogClassName}`} onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center p-4 border-b border-neutral dark:border-neutral-darkest">
@@ -31,7 +23,7 @@ const InfoModal: React.FC<InfoModalProps> = ({ title, children, onClose, dialogC
 const benefitsData = [
     {
         title: '1️⃣ Nation-Building Contribution 🛣️🏥📚',
-        desc: "When you pay taxes, you're directly contributing to the country’s development.",
+        desc: "When you pay taxes, you're directly contributing to the country's development.",
         list: { title: '✅ Taxes fund:', items: ['Roads, highways, and transportation systems 🛣️', 'Government hospitals and public health infrastructure 🏥', 'Schools and colleges 🏫', 'Defence and police services 🛡️👮', 'Emergency relief and disaster management 🚒', 'Clean water and sanitation projects 🚰'] },
         why: 'Every rupee paid as tax helps build a stronger, more self-reliant India.',
     },
@@ -42,7 +34,7 @@ const benefitsData = [
     },
     {
         title: '3️⃣ Improves Your Financial Reputation 🏦💳',
-        desc: 'Filing ITR regularly shows you’re financially disciplined. This is crucial when applying for:',
+        desc: 'Filing ITR regularly shows you're financially disciplined. This is crucial when applying for:',
         list: { items: ['Personal or home loans 🏠', 'Vehicle loans 🚗', 'Credit cards 💳', 'Insurance policies with high cover 🛡️'] },
         why: 'Lenders often request 2–3 years of ITR as proof of stable income.',
     },
@@ -54,7 +46,7 @@ const benefitsData = [
     {
         title: '5️⃣ Claiming Tax Refunds 💰📩',
         desc: 'If excess tax is deducted (like TDS from salary, fixed deposits, or rent), you can claim the refund only by filing your ITR.',
-        why: 'You can recover thousands of rupees, especially if you’re eligible for deductions under 80C, 80D, etc.',
+        why: 'You can recover thousands of rupees, especially if you're eligible for deductions under 80C, 80D, etc.',
     },
     {
         title: '6️⃣ Helps in Carrying Forward Losses 📉➡️📈',
@@ -76,7 +68,7 @@ const benefitsData = [
     {
         title: '9️⃣ Avoids Penalties, Notices & Prosecution 🚫📮',
         desc: 'If you fail to file your tax return:',
-        list: { items: ['You may be charged late fees of ₹1,000 to ₹5,000 under Section 234F', 'You’ll pay interest on unpaid tax under Section 234A/B/C', 'In serious cases, you can face prosecution and up to 7 years’ imprisonment'] },
+        list: { items: ['You may be charged late fees of ₹1,000 to ₹5,000 under Section 234F', 'You'll pay interest on unpaid tax under Section 234A/B/C', 'In serious cases, you can face prosecution and up to 7 years' imprisonment'] },
         why: 'Filing on time avoids all unnecessary financial and legal troubles.',
     },
     {
@@ -93,7 +85,7 @@ const benefitsData = [
     },
     {
         title: '1️⃣2️⃣ Useful for High-Value Transactions 💼🏦',
-        desc: 'You’ll need ITR copies for documentation if you perform high-value transactions such as:',
+        desc: 'You'll need ITR copies for documentation if you perform high-value transactions such as:',
         list: { items: ['Buy/sell property', 'Invest large sums', 'Purchase luxury items or insurance > ₹50,000'] },
         why: 'Keeps you in good standing with banks and the IT department.',
     },
@@ -232,7 +224,7 @@ const NewRegimeContent = () => (
                 <h5 className="font-semibold mb-2">✅ Allowed:</h5>
                 <ul className="list-disc list-inside space-y-1">
                     <li>Standard Deduction (₹75,000)</li>
-                    <li>Employer’s NPS contribution</li>
+                    <li>Employer's NPS contribution</li>
                     <li>Agniveer Corpus Fund</li>
                 </ul>
             </div>
@@ -371,7 +363,7 @@ const EfilingGuideContent = () => (
         <div>
             <h4 className="text-lg font-bold text-primary dark:text-primary-light mb-2">9. Validate and Check ✔️</h4>
             <ul className="list-disc list-inside space-y-1 pl-2">
-                 <li>Use “Preview” or “Validate” to check.</li>
+                 <li>Use "Preview" or "Validate" to check.</li>
                  <li>Review all details carefully.</li>
                  <li>Fix any errors the portal highlights 🛠️</li>
             </ul>
@@ -390,8 +382,8 @@ const EfilingGuideContent = () => (
          <div>
             <h4 className="text-lg font-bold text-primary dark:text-primary-light mb-2">Tips & Reminders 💡</h4>
             <ul className="list-disc list-inside space-y-1 pl-2">
-                 <li>Use “Save Draft” 📝 often to avoid data loss.</li>
-                 <li>Use ‘Help’ (?) if unsure in any section.</li>
+                 <li>Use "Save Draft" 📝 often to avoid data loss.</li>
+                 <li>Use 'Help' (?) if unsure in any section.</li>
                  <li>Filing deadline is usually July 31 📅</li>
             </ul>
         </div>
@@ -422,13 +414,13 @@ const videoTutorials = [
     },
 ];
 
-const AboutTax: React.FC = () => {
+const AboutTax = () => {
     const [isBenefitsModalOpen, setIsBenefitsModalOpen] = useState(false);
     const [isConsequencesModalOpen, setIsConsequencesModalOpen] = useState(false);
     const [isOldRegimeModalOpen, setIsOldRegimeModalOpen] = useState(false);
     const [isNewRegimeModalOpen, setIsNewRegimeModalOpen] = useState(false);
     const [isEfilingModalOpen, setIsEfilingModalOpen] = useState(false);
-    const [activeVideo, setActiveVideo] = useState<{ title: string; src: string } | null>(null);
+    const [activeVideo, setActiveVideo] = useState(null);
 
     return (
         <div className="max-w-4xl mx-auto p-4 md:p-8 space-y-8">

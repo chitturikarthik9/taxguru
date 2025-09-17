@@ -1,5 +1,4 @@
-
-import { AgeGroup } from './types';
+import { AgeGroup } from './types.js';
 
 export const STANDARD_DEDUCTION_OLD = 50000;
 export const STANDARD_DEDUCTION_NEW = 75000;

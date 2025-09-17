@@ -1,6 +1,5 @@
-
 import { useCallback } from 'react';
-import { FormData, TaxResults, TaxCalculationResult, DeductionKey } from '../types';
+import { DeductionKey } from '../types.js';
 import {
   OLD_REGIME_SLABS,
   NEW_REGIME_SLABS,
@@ -10,12 +9,12 @@ import {
   REBATE_LIMIT_OLD,
   REBATE_AMOUNT_OLD,
   REBATE_LIMIT_NEW
-} from '../constants';
+} from '../constants.js';
 
 // Helper function to round a number to the nearest 10, as per Section 288A
-const roundToNearestTen = (num: number) => Math.round(num / 10) * 10;
+const roundToNearestTen = (num) => Math.round(num / 10) * 10;
 
-const calculateTaxFromSlabs = (income: number, slabs: { limit: number; rate: number }[]): number => {
+const calculateTaxFromSlabs = (income, slabs) => {
   let tax = 0;
   let remainingIncome = income;
   let previousLimit = 0;
@@ -34,7 +33,7 @@ const calculateTaxFromSlabs = (income: number, slabs: { limit: number; rate: num
   return tax;
 };
 
-const getSurcharge = (taxableIncome: number, taxOnIncome: number, regime: 'old' | 'new'): number => {
+const getSurcharge = (taxableIncome, taxOnIncome, regime) => {
   if (taxOnIncome === 0) return 0;
 
   if (taxableIncome <= 5000000) return 0; // up to 50 lakhs
@@ -52,7 +51,7 @@ const getSurcharge = (taxableIncome: number, taxOnIncome: number, regime: 'old' 
 
 
 export const useTaxCalculator = () => {
-  const calculateTaxes = useCallback((formData: FormData): TaxResults => {
+  const calculateTaxes = useCallback((formData) => {
     const { ageGroup, income, selectedDeductions } = formData;
 
     const { [DeductionKey.HRA_10_13A]: hraExemptionValue, ...chapterViADeductions } = selectedDeductions;
@@ -94,7 +93,7 @@ export const useTaxCalculator = () => {
     const finalCessOld = Math.round(taxWithSurchargeOld * CESS_RATE);
     const finalTotalTaxOld = taxWithSurchargeOld + finalCessOld;
 
-    const oldRegimeResult: TaxCalculationResult = {
+    const oldRegimeResult = {
       taxableIncome: taxableIncomeOld,
       baseTax: finalBaseTaxOld,
       surcharge: finalSurchargeOld,
@@ -125,7 +124,7 @@ export const useTaxCalculator = () => {
     const finalCessNew = Math.round(taxWithSurchargeNew * CESS_RATE);
     const finalTotalTaxNew = taxWithSurchargeNew + finalCessNew;
 
-    const newRegimeResult: TaxCalculationResult = {
+    const newRegimeResult = {
       taxableIncome: taxableIncomeNew,
       baseTax: finalBaseTaxNew,
       surcharge: finalSurchargeNew,

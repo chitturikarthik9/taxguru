@@ -1,8 +1,7 @@
-
 import React from 'react';
-import { Deduction, DeductionKey } from '../types';
+import { DeductionKey } from '../types.js';
 
-export const DEDUCTION_OPTIONS: Deduction[] = [
+export const DEDUCTION_OPTIONS = [
   { 
     id: DeductionKey.SEC_80C, 
     label: 'Section 80C (Investments/Expenses)', 
@@ -12,7 +11,7 @@ export const DEDUCTION_OPTIONS: Deduction[] = [
       <>
         <p className="mb-2"><strong>Limit:</strong> ₹1,50,000 per year (This is a combined limit that includes contributions to 80CCC and 80CCD(1)).</p>
         <p className="mb-2"><strong>Who Can Claim:</strong> Individuals and Hindu Undivided Families (HUF).</p>
-        <h4 className="font-semibold text-primary dark:text-primary-light mt-4 mb-2">What’s Covered:</h4>
+        <h4 className="font-semibold text-primary dark:text-primary-light mt-4 mb-2">What's Covered:</h4>
         <ul className="list-disc list-inside space-y-1">
           <li><strong>Life Insurance Premium:</strong> Paid for self, spouse, or children.</li>
           <li><strong>PPF (Public Provident Fund):</strong> Government-backed long-term saving with a 15-year lock-in.</li>

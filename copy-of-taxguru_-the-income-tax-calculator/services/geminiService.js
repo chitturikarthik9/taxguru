@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Chat } from "@google/genai";
 
 // Ensure API_KEY is available in the environment variables
@@ -9,7 +8,7 @@ if (!apiKey) {
 
 const ai = new GoogleGenAI({ apiKey });
 
-const chat: Chat = ai.chats.create({
+const chat = ai.chats.create({
   model: 'gemini-2.5-flash',
   config: {
     systemInstruction: `You are TaxGPT, a friendly and expert AI assistant specializing in Indian income tax rules. Your primary goal is to help users understand their tax obligations.
@@ -23,7 +22,7 @@ const chat: Chat = ai.chats.create({
 });
 
 
-export const sendMessageToAI = async (message: string): Promise<string> => {
+export const sendMessageToAI = async (message) => {
     try {
         const response = await chat.sendMessage({ message });
         return response.text;

@@ -1,27 +1,23 @@
-
 import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import TaxCalculator from './components/TaxCalculator';
-import AboutTax from './components/AboutTax';
-import Chatbot from './components/Chatbot';
-import Footer from './components/Footer';
+import Navbar from './components/Navbar.jsx';
+import TaxCalculator from './components/TaxCalculator.jsx';
+import AboutTax from './components/AboutTax.jsx';
+import Chatbot from './components/Chatbot.jsx';
+import Footer from './components/Footer.jsx';
 
-type View = 'calculator' | 'about';
-type Theme = 'light' | 'dark' | 'system';
-
-const App: React.FC = () => {
-    const [activeView, setActiveView] = useState<View>('calculator');
+const App = () => {
+    const [activeView, setActiveView] = useState('calculator');
     const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-    const [theme, setTheme] = useState<Theme>(() => {
+    const [theme, setTheme] = useState(() => {
         const savedTheme = localStorage.getItem('theme');
-        return (savedTheme as Theme) || 'system';
+        return savedTheme || 'system';
     });
 
     useEffect(() => {
         const root = window.document.documentElement;
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-        const applyTheme = (currentTheme: Theme) => {
+        const applyTheme = (currentTheme) => {
             localStorage.setItem('theme', currentTheme);
             if (currentTheme === 'dark' || (currentTheme === 'system' && mediaQuery.matches)) {
                 root.classList.add('dark');
@@ -32,7 +28,7 @@ const App: React.FC = () => {
 
         applyTheme(theme);
 
-        const handleChange = (e: MediaQueryListEvent) => {
+        const handleChange = (e) => {
             if (theme === 'system') {
                 if (e.matches) {
                     root.classList.add('dark');

@@ -1,22 +1,8 @@
-
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { ChatMessage } from '../types';
-import { sendMessageToAI } from '../services/geminiService';
-import MicrophoneIcon from './icons/MicrophoneIcon';
-import SpeakerOnIcon from './icons/SpeakerOnIcon';
-import SpeakerOffIcon from './icons/SpeakerOffIcon';
-
-// Add SpeechRecognition to window type for TypeScript
-declare global {
-    interface Window {
-        SpeechRecognition: any;
-        webkitSpeechRecognition: any;
-    }
-}
-
-interface ChatbotProps {
-    onClose: () => void;
-}
+import { sendMessageToAI } from '../services/geminiService.js';
+import MicrophoneIcon from './icons/MicrophoneIcon.jsx';
+import SpeakerOnIcon from './icons/SpeakerOnIcon.jsx';
+import SpeakerOffIcon from './icons/SpeakerOffIcon.jsx';
 
 const supportedLanguages = [
     { code: 'en-US', name: 'English (US)' },
@@ -29,8 +15,8 @@ const supportedLanguages = [
     { code: 'gu-IN', name: 'Gujarati' },
 ];
 
-const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
-    const [messages, setMessages] = useState<ChatMessage[]>([
+const Chatbot = ({ onClose }) => {
+    const [messages, setMessages] = useState([
         { sender: 'ai', text: 'Hello! I am TaxGPT. How can I help you with your Indian income tax questions today?', timestamp: new Date().toLocaleTimeString() }
     ]);
     const [input, setInput] = useState('');
@@ -38,9 +24,9 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
     const [isListening, setIsListening] = useState(false);
     const [selectedLang, setSelectedLang] = useState('en-US');
     const [isSpeechOutputOn, setIsSpeechOutputOn] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const recognitionRef = useRef<any | null>(null);
-    const messagesEndRef = useRef<null | HTMLDivElement>(null);
+    const [error, setError] = useState(null);
+    const recognitionRef = useRef(null);
+    const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -57,7 +43,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
         }
     }, [error]);
 
-    const speak = useCallback((text: string, lang: string) => {
+    const speak = useCallback((text, lang) => {
         if (!isSpeechOutputOn || !window.speechSynthesis) return;
 
         window.speechSynthesis.cancel();
@@ -71,24 +57,24 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
         window.speechSynthesis.speak(utterance);
     }, [isSpeechOutputOn]);
 
-    const handleSend = useCallback(async (messageText: string = input) => {
+    const handleSend = useCallback(async (messageText = input) => {
         if (messageText.trim() === '') return;
         setError(null);
         window.speechSynthesis?.cancel();
 
-        const userMessage: ChatMessage = { sender: 'user', text: messageText, timestamp: new Date().toLocaleTimeString() };
+        const userMessage = { sender: 'user', text: messageText, timestamp: new Date().toLocaleTimeString() };
         setMessages(prev => [...prev, userMessage]);
         setInput('');
         setIsTyping(true);
 
         try {
             const aiResponseText = await sendMessageToAI(messageText);
-            const aiMessage: ChatMessage = { sender: 'ai', text: aiResponseText, timestamp: new Date().toLocaleTimeString() };
+            const aiMessage = { sender: 'ai', text: aiResponseText, timestamp: new Date().toLocaleTimeString() };
             setMessages(prev => [...prev, aiMessage]);
             speak(aiResponseText, selectedLang);
         } catch (error) {
             const errorMessageText = "Sorry, something went wrong. Please try again.";
-            const errorMessage: ChatMessage = { sender: 'ai', text: errorMessageText, timestamp: new Date().toLocaleTimeString() };
+            const errorMessage = { sender: 'ai', text: errorMessageText, timestamp: new Date().toLocaleTimeString() };
             setMessages(prev => [...prev, errorMessage]);
             speak(errorMessageText, selectedLang);
         } finally {
@@ -104,10 +90,10 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
             recognition.continuous = false;
             recognition.interimResults = true;
 
-            recognition.onresult = (event: any) => {
+            recognition.onresult = (event) => {
                 let final_transcript = '';
                 let interim_transcript = Array.from(event.results)
-                  .map((result: any) => result[0].transcript).join('');
+                  .map((result) => result[0].transcript).join('');
 
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
@@ -127,7 +113,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
                 setIsListening(false);
             };
 
-            recognition.onerror = (event: any) => {
+            recognition.onerror = (event) => {
                 console.error('Speech recognition error:', event.error);
                 let errorMessage = "An error occurred during speech recognition. Please try again.";
                 if (event.error === 'network') {
@@ -167,7 +153,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
         }
     };
     
-    const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleLanguageChange = (e) => {
         setSelectedLang(e.target.value);
         if(isListening) {
             recognitionRef.current?.stop();
