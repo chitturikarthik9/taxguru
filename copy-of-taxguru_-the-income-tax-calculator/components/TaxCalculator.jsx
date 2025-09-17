@@ -1,19 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { AgeGroup, DeductionKey, FormData, TaxResults, IncomeData, TaxCalculationResult, FinancialYear } from '../types';
-import { useTaxCalculator } from '../hooks/useTaxCalculator';
-import { STANDARD_DEDUCTION_OLD, STANDARD_DEDUCTION_NEW } from '../constants';
-import { DEDUCTION_OPTIONS } from '../data/deductions';
-import Card from './Card';
-import CalculatorIcon from './icons/CalculatorIcon';
-import InfoIcon from './icons/InfoIcon';
+import { AgeGroup, DeductionKey, FinancialYear } from '../types.js';
+import { useTaxCalculator } from '../hooks/useTaxCalculator.js';
+import { STANDARD_DEDUCTION_OLD, STANDARD_DEDUCTION_NEW } from '../constants.js';
+import { DEDUCTION_OPTIONS } from '../data/deductions.jsx';
+import Card from './Card.jsx';
+import CalculatorIcon from './icons/CalculatorIcon.jsx';
+import InfoIcon from './icons/InfoIcon.jsx';
 
-interface DeductionInfoModalProps {
-    title: string;
-    children: React.ReactNode;
-    onClose: () => void;
-}
-
-const DeductionInfoModal: React.FC<DeductionInfoModalProps> = ({ title, children, onClose }) => (
+const DeductionInfoModal = ({ title, children, onClose }) => (
     <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4" onClick={onClose} aria-modal="true" role="dialog">
         <div className="bg-white dark:bg-neutral-dark rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-center p-4 border-b border-neutral dark:border-neutral-darkest">
@@ -31,15 +25,7 @@ const DeductionInfoModal: React.FC<DeductionInfoModalProps> = ({ title, children
     </div>
 );
 
-interface IncomeInputProps {
-    label: string;
-    name: keyof IncomeData;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onInfoClick?: () => void;
-}
-
-const IncomeInput: React.FC<IncomeInputProps> = ({ label, name, value, onChange, onInfoClick }) => (
+const IncomeInput = ({ label, name, value, onChange, onInfoClick }) => (
     <div>
         <label htmlFor={name} className="flex items-center text-sm font-medium text-neutral-dark dark:text-neutral-light mb-1">
             {label}
@@ -72,13 +58,13 @@ const IncomeInput: React.FC<IncomeInputProps> = ({ label, name, value, onChange,
 );
 
 
-const TaxCalculator: React.FC = () => {
+const TaxCalculator = () => {
     const financialYearOptions = [
         { value: FinancialYear.FY_2024_25, label: 'FY 2024-2025 (Returns to be filed)' },
         { value: FinancialYear.FY_2025_26, label: 'FY 2025-2026 (Returns to be filed)' },
     ];
 
-    const [formData, setFormData] = useState<FormData>({
+    const [formData, setFormData] = useState({
         financialYear: FinancialYear.FY_2024_25,
         ageGroup: AgeGroup.BELOW_60,
         income: {
@@ -93,17 +79,17 @@ const TaxCalculator: React.FC = () => {
         },
         selectedDeductions: {},
     });
-    const [taxResults, setTaxResults] = useState<TaxResults | null>(null);
+    const [taxResults, setTaxResults] = useState(null);
     const { calculateTaxes } = useTaxCalculator();
-    const resultsRef = useRef<HTMLDivElement>(null);
-    const [modalContent, setModalContent] = useState<{ title: string; content: React.ReactNode } | null>(null);
+    const resultsRef = useRef(null);
+    const [modalContent, setModalContent] = useState(null);
 
-    const formatForInput = (num: number): string => {
+    const formatForInput = (num) => {
         if (num === 0) return '';
         return new Intl.NumberFormat('en-IN').format(num);
     };
 
-    const parseFromInput = (str: string): number => {
+    const parseFromInput = (str) => {
         return parseFloat(str.replace(/,/g, '')) || 0;
     };
 
@@ -113,11 +99,11 @@ const TaxCalculator: React.FC = () => {
         }
     }, [taxResults]);
     
-    const handleFinancialYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setFormData(prev => ({ ...prev, financialYear: e.target.value as FinancialYear }));
+    const handleFinancialYearChange = (e) => {
+        setFormData(prev => ({ ...prev, financialYear: e.target.value }));
     };
 
-    const handleIncomeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleIncomeChange = (e) => {
         const { name, value } = e.target;
         const numericValue = parseFromInput(value);
         setFormData(prev => ({
@@ -129,11 +115,11 @@ const TaxCalculator: React.FC = () => {
         }));
     };
     
-    const handleAgeGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setFormData(prev => ({ ...prev, ageGroup: e.target.value as AgeGroup }));
+    const handleAgeGroupChange = (e) => {
+        setFormData(prev => ({ ...prev, ageGroup: e.target.value }));
     };
 
-    const handleDeductionChange = (id: DeductionKey, checked: boolean) => {
+    const handleDeductionChange = (id, checked) => {
         const newDeductions = { ...formData.selectedDeductions };
         if (checked) {
             newDeductions[id] = 0;
@@ -143,7 +129,7 @@ const TaxCalculator: React.FC = () => {
         setFormData(prev => ({ ...prev, selectedDeductions: newDeductions }));
     };
 
-    const handleDeductionAmountChange = (id: DeductionKey, value: string) => {
+    const handleDeductionAmountChange = (id, value) => {
         const numericValue = parseFromInput(value);
         const deductionInfo = DEDUCTION_OPTIONS.find(d => d.id === id);
         const cappedAmount = Math.min(numericValue, deductionInfo?.limit || Infinity);
@@ -156,13 +142,13 @@ const TaxCalculator: React.FC = () => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const results = calculateTaxes(formData);
         setTaxResults(results);
     };
 
-    const formatCurrency = (value: number) => {
+    const formatCurrency = (value) => {
         return new Intl.NumberFormat('en-IN', {
             style: 'currency',
             currency: 'INR',
@@ -171,15 +157,15 @@ const TaxCalculator: React.FC = () => {
         }).format(value);
     };
 
-    const formatIndianNumber = (value: number) => {
+    const formatIndianNumber = (value) => {
          return new Intl.NumberFormat('en-IN').format(value);
     };
 
-    const getFinancialYearText = (fy: FinancialYear): string => {
+    const getFinancialYearText = (fy) => {
         return financialYearOptions.find(opt => opt.value === fy)?.label || '';
     };
 
-    const incomeFields: { name: keyof IncomeData, label: string, info?: React.ReactNode }[] = [
+    const incomeFields = [
         { name: 'salary', label: 'Income from Salary' },
         { name: 'exemptAllowances', label: 'Exempt allowances (e.g. LTA)' },
         { name: 'interest', label: 'Income from interest' },
@@ -217,7 +203,7 @@ const TaxCalculator: React.FC = () => {
         return d.id !== DeductionKey.SEC_80TTB;
     });
 
-    const renderResultCard = (title: string, result: TaxCalculationResult, isRecommended: boolean) => (
+    const renderResultCard = (title, result, isRecommended) => (
         <Card className={`flex-1 ${isRecommended ? 'border-2 border-secondary' : 'border-2 border-transparent'}`}>
             <h3 className="text-xl font-bold text-center text-primary-dark dark:text-primary-light mb-4">{title}</h3>
             {isRecommended && <div className="text-center text-sm font-semibold bg-secondary/20 text-secondary-dark rounded-full px-3 py-1 mb-4">Recommended</div>}

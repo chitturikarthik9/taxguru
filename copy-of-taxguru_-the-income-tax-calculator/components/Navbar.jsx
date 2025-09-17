@@ -1,30 +1,12 @@
 import React from 'react';
-import CalculatorIcon from './icons/CalculatorIcon';
-import InfoIcon from './icons/InfoIcon';
-import ChatIcon from './icons/ChatIcon';
-import SunIcon from './icons/SunIcon';
-import MoonIcon from './icons/MoonIcon';
-import SystemIcon from './icons/SystemIcon';
+import CalculatorIcon from './icons/CalculatorIcon.jsx';
+import InfoIcon from './icons/InfoIcon.jsx';
+import ChatIcon from './icons/ChatIcon.jsx';
+import SunIcon from './icons/SunIcon.jsx';
+import MoonIcon from './icons/MoonIcon.jsx';
+import SystemIcon from './icons/SystemIcon.jsx';
 
-type View = 'calculator' | 'about';
-type Theme = 'light' | 'dark' | 'system';
-
-interface NavbarProps {
-    activeView: View;
-    setActiveView: (view: View) => void;
-    isChatbotOpen: boolean;
-    toggleChatbot: () => void;
-    theme: Theme;
-    toggleTheme: () => void;
-}
-
-interface NavItemProps {
-    children: React.ReactNode;
-    isActive: boolean;
-    onClick: () => void;
-}
-
-const NavItem: React.FC<NavItemProps> = ({ children, isActive, onClick }) => (
+const NavItem = ({ children, isActive, onClick }) => (
     <button
         onClick={onClick}
         className={`flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -37,7 +19,7 @@ const NavItem: React.FC<NavItemProps> = ({ children, isActive, onClick }) => (
     </button>
 );
 
-const Navbar: React.FC<NavbarProps> = ({ activeView, setActiveView, isChatbotOpen, toggleChatbot, theme, toggleTheme }) => {
+const Navbar = ({ activeView, setActiveView, isChatbotOpen, toggleChatbot, theme, toggleTheme }) => {
     const renderThemeIcon = () => {
         switch (theme) {
             case 'light':
